@@ -48,5 +48,5 @@ jobs:
         run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> "$GITHUB_ENV"
 
       - name: Use it
-        run: echo "Building version $SHORT_SHA
+        run: echo "Building version $SHORT_SHA"
 

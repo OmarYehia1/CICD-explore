@@ -79,7 +79,4 @@ jobs:
             echo "| Commit | \`${GITHUB_SHA::7}\` |"
             echo "| Actor | @${GITHUB_ACTOR} |"
           } >> "$GITHUB_STEP_SUMMARY"
-      - name: Print PR Title
-        env:
-         PR_TITLE: ${{ github.event.pull_request.title }}
-        run: echo "PR title: $PR_TITLE"
+    

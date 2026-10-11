@@ -30,3 +30,17 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: echo "$GITHUB_CONTEXT"
+      
+
+      - name: Only on main
+        if: github.ref == 'refs/heads/main'
+        run: echo "We are on main"
+
+      - name: Only when triggered manually
+        if: github.event_name == 'workflow_dispatch'
+        run: echo "Somebody clicked the button"
+
+      - name: Only if the commit message contains [deploy]
+        if: contains(github.event.head_commit.message, '[deploy]')
+        run: echo "Deploy requested via commit message"
+

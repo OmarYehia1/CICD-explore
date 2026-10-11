@@ -1,0 +1,32 @@
+name: Contexts Playground
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  APP_NAME: calculator
+
+jobs:
+  explore:
+    runs-on: ubuntu-latest
+    env:
+      STAGE: test
+    steps:
+      - name: Variables at different levels
+        env:
+          STAGE: override
+        run: echo "$APP_NAME / $STAGE"
+
+      - name: Default variables vs contexts
+        run: |
+          echo "Shell variable:  $GITHUB_REPOSITORY @ $GITHUB_SHA"
+          echo "Expression:      ${{ github.repository }} @ ${{ github.sha }}"
+          echo "Runner OS:       ${{ runner.os }}"
+          echo "Run number:      ${{ github.run_number }}"
+
+      - name: Dump the whole github context (great for discovering fields)
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"

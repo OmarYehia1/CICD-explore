@@ -50,3 +50,33 @@ jobs:
       - name: Use it
         run: echo "Building version $SHORT_SHA"
 
+  version:
+    runs-on: ubuntu-latest
+    outputs:                                    # expose to other jobs
+      version: ${{ steps.ver.outputs.version }}
+    steps:
+      - name: Compute version
+        id: ver                                 # id is required to reference the step
+        run: echo "version=1.0.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+
+      - name: Use it in the same job
+        run: echo "Version is ${{ steps.ver.outputs.version }}"
+
+  release-notes:
+    needs: version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use it from another job
+        run: echo "Preparing release ${{ needs.version.outputs.version }}"
+
+      - name: Write a job summary
+        run: |
+          {
+            echo "## 🚀 Release ${{ needs.version.outputs.version }}"
+            echo ""
+            echo "| Key | Value |"
+            echo "|-----|-------|"
+            echo "| Commit | \`${GITHUB_SHA::7}\` |"
+            echo "| Actor | @${GITHUB_ACTOR} |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
